@@ -1,0 +1,114 @@
+package analizadores;
+
+import java.util.LinkedList;
+import java_cup.runtime.*;
+import main.*;
+
+
+parser code
+{:
+    //Estructuras que guardan las la de claves y de registros
+    public LinkedList<String> raizClaves;
+    public LinkedList<Registro> raizRegistros;
+
+    //Método al que se llama automáticamente ante algun error sintactico
+    public void syntax_error(Symbol s){
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". No se esperaba este componente: " + (s.value) + ".");
+    }
+
+    //Método al que se llama en el momento en que ya no es posible una recuperación de errores.
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". Componente " + (s.value) + " no reconocido.");
+    }
+
+:}
+
+terminal String igual, corcheteabierto, corchetecerrado, coma, llaveabierta, llavecerrada, cadena, numerico;
+terminal String rclaves, rregistros;
+
+non terminal S;
+non terminal CLAVES;
+non terminal REGISTROS;
+non terminal Registro REGISTRO;
+non terminal LinkedList<String> LISTA_CLAVES;
+non terminal LinkedList<Registro> LISTA_REGISTROS;
+non terminal LinkedList<Valor> LISTA_VALORES;
+non terminal Valor VALOR;
+
+start with S;
+
+S ::= CLAVES REGISTROS
+    {:
+    
+    :}
+;
+
+CLAVES ::= rclaves igual corcheteabierto LISTA_CLAVES:lista corchetecerrado
+    {:
+        parser.raizClaves = lista;
+    :}
+;
+
+LISTA_CLAVES ::= LISTA_CLAVES:a cadena:b
+    {:
+        RESULT = a;
+        RESULT.add(b);
+    :}
+
+    |cadena:a
+    {:
+        RESULT = new LinkedList();
+        RESULT.add(a);
+    :}
+;
+
+
+REGISTROS ::= rregistros igual corcheteabierto LISTA_REGISTROS:a corchetecerrado
+    {:
+        parser.raizRegistros = a;
+    :}
+;
+
+LISTA_REGISTROS ::= LISTA_REGISTROS:a coma REGISTRO:b
+    {:
+        RESULT = a; 
+        RESULT.add(b);
+    :}
+
+    | REGISTRO:a 
+    {:
+        RESULT = new LinkedList();
+        RESULT.add(a);
+    :}
+;
+
+
+REGISTRO ::= llaveabierta LISTA_VALORES:a llavecerrada
+    {:
+        RESULT = new Registro(a);
+    :}
+;
+
+LISTA_VALORES ::= LISTA_VALORES:a VALOR:b
+    {:
+        RESULT = a; 
+        RESULT.add(b);
+    :}
+
+    | VALOR:a
+    {:
+        RESULT = new LinkedList(); 
+        RESULT.add(a);
+    :}
+;
+
+VALOR ::= numerico:valor_numerico
+    {:
+        RESULT = new Valor(valor_numerico, "numerico");
+    :}
+
+    | cadena:valor_string
+    {:
+        RESULT = new Valor(valor_string, "cadena");
+    :}
+;
