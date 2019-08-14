@@ -1,0 +1,104 @@
+package analizadores;
+import java_cup.runtime.Symbol;
+import java_cup.sym;
+import main.Main;
+
+%%
+
+%class LexerReportes
+%public
+%line
+%char
+%cup
+%cupsym symReportes
+%unicode
+%ignorecase
+
+%{
+    public boolean _existenTokens = true;
+%}
+
+%init{
+    yyline = 1;
+    yychar = 1;
+%init}
+
+%eof{
+    this._existenTokens = false;
+%eof}
+
+
+//EXPRESIONES REGULARES
+LETRAS = [A-Za-z]
+DIGITOS = \d
+GUION_BAJO = _
+COMENTARIO_UNA_LINEA = (\/\/.*)
+COMENTARIO_MULTILINEA = "/*" [^/] ~"*/" | "/*" "/"+ "*/"
+CADENA = [\"]([^\"\n]|(\\\"))*[\"]
+NUMERICO = -?[0-9]\d*(\.\d+)?
+ESPACIOS_EN_BLANCO = [ \r\t]+
+ID = {LETRAS}({LETRAS}|{DIGITOS}|{GUION_BAJO})*
+
+%%
+
+"=" { return new Symbol(symReportes.igual, yyline, yychar, yytext());}
+
+"," { return new Symbol(symReportes.coma, yyline, yychar, yytext());}
+
+";" {return new Symbol(symReportes.puntoycoma, yyline, yychar, yytext());}
+
+"(" {return new Symbol(symReportes.parentesisAbierto, yyline, yychar, yytext());}
+
+")" {return new Symbol(symReportes.parentesisCerrado, yyline, yychar, yytext());}
+
+">=" {return new Symbol(symReportes.mayoroigual, yyline, yychar, yytext());}
+
+"<=" {return new Symbol(symReportes.menoroigual, yyline, yychar, yytext());}
+
+">" {return new Symbol(symReportes.mayor, yyline, yychar, yytext());}
+
+"<" {return new Symbol(symReportes.menor, yyline, yychar, yytext());}
+
+"==" {return new Symbol(symReportes.dobleigual, yyline, yychar, yytext());}
+
+"!=" {return new Symbol(symReportes.diferentede, yyline, yychar, yytext());}
+
+"archivo" {return new Symbol(symReportes.rarchivo, yyline, yychar, yytext());}
+
+"leerarchivo" {return new Symbol(symReportes.rleerarchivo, yyline, yychar, yytext());}
+
+"numerico" {return new Symbol(symReportes.rnumerico, yyline, yychar, yytext());}
+
+"sumar" {return new Symbol(symReportes.rsumar, yyline, yychar, yytext());}
+
+"imprimir" {return new Symbol(symReportes.rimprimir, yyline, yychar, yytext());}
+
+"contar" {return new Symbol(symReportes.rcomprar, yyline, yychar, yytext());}
+
+"promedio" {return new Symbol(symReportes.rpromedio, yyline, yychar, yytext());}
+
+"contarsi" {return new Symbol(symReportes.rcontarsi, yyline, yychar, yytext());}
+
+"obtenersi" {return new Symbol(symReportes.robtenersi, yyline, yychar, yytext());}
+
+"graficar" {return new Symbol(symReportes.rgraficar, yyline, yychar, yytext());}
+
+
+\n {yychar = 1;}
+
+
+{ESPACIOS_EN_BLANCO} {/*IGNORE*/}
+
+{COMENTARIO_UNA_LINEA} {/*IGNORE*/}
+
+{COMENTARIO_MULTILINEA} {/*IGNORE*/}
+
+{CADENA} {return new Symbol(symReportes.cadena, yyline, yychar, yytext());}
+
+{NUMERICO} {return new Symbol(symReportes.numerico, yyline, yychar, yytext());}
+
+{ID} {return new Symbol(symReportes.id, yyline, yychar, yytext());}
+
+. {
+     lista_errores.add("Error Lexico en el archivo de Reportes",yytext(), yyline, yychar)
+}
