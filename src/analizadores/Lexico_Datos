@@ -1,7 +1,7 @@
 package analizadores;
 import java_cup.runtime.Symbol;
 import java_cup.sym;
-import main.Main;
+import main.*;
 
 %%
 
@@ -65,5 +65,10 @@ ESPACIOS_EN_BLANCO = [ \r\t]+
 {NUMERICO} {return new Symbol(symDatos.numerico, yyline, yychar, yytext());}
 
 . {
-    lista_errores.add("Error Lexico en el archivo de Reportes",yytext(), yyline, yychar);
+    Main.lista_errores.add(new Errores(
+        "Error Lexico en el archivo de Datos",
+        yytext(),
+        yyline,
+        yychar
+    ));
 }

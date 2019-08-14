@@ -1,7 +1,7 @@
 package analizadores;
 import java_cup.runtime.Symbol;
 import java_cup.sym;
-import main.Main;
+import main.*;
 
 %%
 
@@ -100,5 +100,10 @@ ID = {LETRAS}({LETRAS}|{DIGITOS}|{GUION_BAJO})*
 {ID} {return new Symbol(symReportes.id, yyline, yychar, yytext());}
 
 . {
-     lista_errores.add("Error Lexico en el archivo de Reportes",yytext(), yyline, yychar)
+     Main.lista_errores.add(new Errores(
+        "Error Lexico en el archivo de Reportes",
+        yytext(),
+        yyline,
+        yychar
+    ));
 }
