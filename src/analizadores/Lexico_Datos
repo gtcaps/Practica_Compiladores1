@@ -1,0 +1,69 @@
+package analizadores;
+import java_cup.runtime.Symbol;
+import java_cup.sym;
+import main.Main;
+
+%%
+
+%class LexerDatos
+%public
+%line
+%char
+%cup
+%cupsym symDatos
+%unicode
+%ignorecase
+
+%{
+    public boolean _existenTokens = true;
+%}
+
+%init{
+    yyline = 1;
+    yychar = 1;
+%init}
+
+%eof{
+    this._existenTokens = false;
+%eof}
+
+//Expresiones Regulares
+COMENTARIO_UNA_LINEA = (\/\/.*)
+COMENTARIO_MULTILINEA = "/*" [^/] ~"*/" | "/*" "/"+ "*/"
+CADENA = [\"]([^\"\n]|(\\\"))*[\"]
+NUMERICO = -?[0-9]\d*(\.\d+)?
+ESPACIOS_EN_BLANCO = [ \r\t]+
+%%
+
+
+"=" {return new Symbol(symDatos.igual, yyline, yychar, yytext());}
+
+"[" {return new Symbol(symDatos.corcheteabierto, yyline, yychar, yytext());}
+
+"]" {return new Symbol(symDatos.corchetecerrado, yyline, yychar, yytext());}
+
+"," {return new Symbol(symDatos.coma, yyline, yychar, yytext());}
+
+"{" {return new Symbol(symDatos.llaveabierta, yyline, yychar, yytext());}
+
+"}" {return new Symbol(symDatos.llavecerrada, yyline, yychar, yytext());}
+
+"claves" {return new Symbol(symDatos.rclaves, yyline, yychar, yytext());}
+
+"registros" {return new Symbol(symDatos.rregistros, yyline, yychar, yytext());}
+
+\n {yychar = 1;}
+
+{ESPACIOS_EN_BLANCO} {/*IGNORAR*/}
+
+{COMENTARIO_MULTILINEA} {/*IGNORAR*/}
+
+{COMENTARIO_UNA_LINEA} {/*IGNORAR*/}
+
+{CADENA} {return new Symbol(symDatos.cadena, yyline, yychar, yytext());}
+
+{NUMERICO} {return new Symbol(symDatos.numerico, yyline, yychar, yytext());}
+
+. {
+    lista_errores.add("Error Lexico en el archivo de Reportes",yytext(), yyline, yychar);
+}
