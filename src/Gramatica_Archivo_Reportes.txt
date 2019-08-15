@@ -1,0 +1,48 @@
+S -> LISTA_INSTRUCCIONES
+
+LISTA_INSTRUCCIONES -> LISTA_INSTRUCCIONES INSTRUCCION
+                    | INSTRUCCION
+
+
+INSTRUCCION -> DECLARACION
+            | IMPRIMIR
+            | GRAFICAR
+
+DECLARACION -> numerico id = FUNCION_NUMERICA ;
+            |  cadena id = FUNCION_CADENA ;
+            |  archivo id = FUNCION_ARCHIVO ;
+
+FUNCION_NUMERICA -> sumar ( id, cadena )
+                 | contar ( id )
+                 | promedio ( id )
+                 | contarsi ( id, cadena, OPERADOR, VALOR)
+
+FUNCION_CADENA -> obtenersi ( id, cadena, OPERADOR, VALOR)   
+
+FUNCION_ARCHIVO -> leerarchivo ( cadena )
+
+OPERADOR -> mayor
+        | menor
+        | mayoroigual
+        | menoroigual
+        | dobleigual
+        | diferentede
+
+VALOR -> numerico
+      |  cadena
+
+IMPRIMIR -> imprimir ( LISTA_EXPRESIONES ) ;
+
+LISTA_EXPRESIONES -> LISTA_EXPRESIONES , EXPRESION
+                   | EXPRESION 
+
+EXPRESION -> id
+           | numerico
+           | cadena
+
+GRAFICAR -> graficar (  cadena , cadena , id , cadena , cadena  ) ;
+
+
+
+
+   
