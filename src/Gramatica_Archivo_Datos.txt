@@ -1,0 +1,19 @@
+S -> CLAVES REGISTROS
+
+CLAVES -> claves = [ LISTA_CLAVES ]
+
+LISTA_CLAVES -> LISTA_CLAVES , CADENA
+              | CADENA
+
+REGISTROS -> registros = [ LISTA_REGISTROS ]
+
+LISTA_REGISTROS -> LISTA_REGISTROS REGISTRO
+                | REGISTRO
+
+REGISTRO -> { LISTA_VALORES }
+
+LISTA_VALORES -> LISTA_VALORES , VALOR 
+               | VALOR
+
+VALOR -> numerico
+       | cadena
