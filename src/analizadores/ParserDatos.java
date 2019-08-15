@@ -34,9 +34,9 @@ public class ParserDatos extends java_cup.runtime.lr_parser {
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
     "\000\015\000\002\002\004\000\002\002\004\000\002\003" +
-    "\007\000\002\006\004\000\002\006\003\000\002\004\007" +
-    "\000\002\007\005\000\002\007\003\000\002\005\005\000" +
-    "\002\010\004\000\002\010\003\000\002\011\003\000\002" +
+    "\007\000\002\006\005\000\002\006\003\000\002\004\007" +
+    "\000\002\007\004\000\002\007\003\000\002\005\005\000" +
+    "\002\010\005\000\002\010\003\000\002\011\003\000\002" +
     "\011\003" });
 
   /** Access to production table. */
@@ -45,22 +45,22 @@ public class ParserDatos extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\033\000\004\014\006\001\002\000\004\015\016\001" +
-    "\002\000\004\002\015\001\002\000\004\004\007\001\002" +
+    "\000\034\000\004\014\006\001\002\000\004\015\017\001" +
+    "\002\000\004\002\016\001\002\000\004\004\007\001\002" +
     "\000\004\005\010\001\002\000\004\012\012\001\002\000" +
-    "\006\006\014\012\013\001\002\000\006\006\ufffd\012\ufffd" +
-    "\001\002\000\006\006\ufffe\012\ufffe\001\002\000\004\015" +
-    "\uffff\001\002\000\004\002\001\001\002\000\004\004\020" +
-    "\001\002\000\004\002\000\001\002\000\004\005\021\001" +
-    "\002\000\004\010\022\001\002\000\006\012\031\013\032" +
-    "\001\002\000\006\006\025\007\026\001\002\000\006\006" +
-    "\ufffa\007\ufffa\001\002\000\004\002\ufffc\001\002\000\004" +
-    "\010\022\001\002\000\006\006\ufffb\007\ufffb\001\002\000" +
-    "\010\011\034\012\031\013\032\001\002\000\010\011\ufff5" +
-    "\012\ufff5\013\ufff5\001\002\000\010\011\ufff6\012\ufff6\013" +
-    "\ufff6\001\002\000\010\011\ufff7\012\ufff7\013\ufff7\001\002" +
-    "\000\006\006\ufff9\007\ufff9\001\002\000\010\011\ufff8\012" +
-    "\ufff8\013\ufff8\001\002" });
+    "\006\006\013\007\014\001\002\000\006\006\ufffd\007\ufffd" +
+    "\001\002\000\004\015\uffff\001\002\000\004\012\015\001" +
+    "\002\000\006\006\ufffe\007\ufffe\001\002\000\004\002\001" +
+    "\001\002\000\004\004\021\001\002\000\004\002\000\001" +
+    "\002\000\004\005\022\001\002\000\004\010\023\001\002" +
+    "\000\006\012\031\013\032\001\002\000\006\006\026\010" +
+    "\023\001\002\000\006\006\ufffa\010\ufffa\001\002\000\004" +
+    "\002\ufffc\001\002\000\006\006\ufffb\010\ufffb\001\002\000" +
+    "\006\007\035\011\034\001\002\000\006\007\ufff5\011\ufff5" +
+    "\001\002\000\006\007\ufff6\011\ufff6\001\002\000\006\007" +
+    "\ufff7\011\ufff7\001\002\000\006\006\ufff9\010\ufff9\001\002" +
+    "\000\006\012\031\013\032\001\002\000\006\007\ufff8\011" +
+    "\ufff8\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -68,17 +68,17 @@ public class ParserDatos extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\033\000\006\002\004\003\003\001\001\000\004\004" +
-    "\016\001\001\000\002\001\001\000\002\001\001\000\002" +
+    "\000\034\000\006\002\004\003\003\001\001\000\004\004" +
+    "\017\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\004\006\010\001\001\000\002\001\001\000" +
     "\002\001\001\000\002\001\001\000\002\001\001\000\002" +
     "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
-    "\001\000\006\005\023\007\022\001\001\000\006\010\027" +
-    "\011\032\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\004\005\026\001\001\000\002\001\001" +
-    "\000\004\011\034\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\006\005\024\007\023\001\001" +
+    "\000\006\010\027\011\032\001\001\000\004\005\026\001" +
     "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
-    "" });
+    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
+    "\002\001\001\000\002\001\001\000\004\011\035\001\001" +
+    "\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -175,9 +175,7 @@ class CUP$ParserDatos$actions {
           case 1: // S ::= CLAVES REGISTROS 
             {
               Object RESULT =null;
-		
-    
-    
+
               CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("S",0, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
             }
           return CUP$ParserDatos$result;
@@ -197,12 +195,12 @@ class CUP$ParserDatos$actions {
           return CUP$ParserDatos$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // LISTA_CLAVES ::= LISTA_CLAVES cadena 
+          case 3: // LISTA_CLAVES ::= LISTA_CLAVES coma cadena 
             {
               LinkedList<String> RESULT =null;
-		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).left;
-		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).right;
-		LinkedList<String> a = (LinkedList<String>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).value;
+		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).right;
+		LinkedList<String> a = (LinkedList<String>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).value;
 		int bleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).right;
 		String b = (String)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.peek()).value;
@@ -210,7 +208,7 @@ class CUP$ParserDatos$actions {
         RESULT = a;
         RESULT.add(b);
     
-              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_CLAVES",4, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
+              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_CLAVES",4, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
             }
           return CUP$ParserDatos$result;
 
@@ -244,12 +242,12 @@ class CUP$ParserDatos$actions {
           return CUP$ParserDatos$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // LISTA_REGISTROS ::= LISTA_REGISTROS coma REGISTRO 
+          case 6: // LISTA_REGISTROS ::= LISTA_REGISTROS REGISTRO 
             {
               LinkedList<Registro> RESULT =null;
-		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).left;
-		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).right;
-		LinkedList<Registro> a = (LinkedList<Registro>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).value;
+		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).right;
+		LinkedList<Registro> a = (LinkedList<Registro>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).value;
 		int bleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).right;
 		Registro b = (Registro)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.peek()).value;
@@ -257,7 +255,7 @@ class CUP$ParserDatos$actions {
         RESULT = a; 
         RESULT.add(b);
     
-              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_REGISTROS",5, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
+              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_REGISTROS",5, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
             }
           return CUP$ParserDatos$result;
 
@@ -291,12 +289,12 @@ class CUP$ParserDatos$actions {
           return CUP$ParserDatos$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // LISTA_VALORES ::= LISTA_VALORES VALOR 
+          case 9: // LISTA_VALORES ::= LISTA_VALORES coma VALOR 
             {
               LinkedList<Valor> RESULT =null;
-		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).left;
-		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).right;
-		LinkedList<Valor> a = (LinkedList<Valor>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)).value;
+		int aleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).left;
+		int aright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).right;
+		LinkedList<Valor> a = (LinkedList<Valor>)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)).value;
 		int bleft = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()).right;
 		Valor b = (Valor)((java_cup.runtime.Symbol) CUP$ParserDatos$stack.peek()).value;
@@ -304,7 +302,7 @@ class CUP$ParserDatos$actions {
         RESULT = a; 
         RESULT.add(b);
     
-              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_VALORES",6, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-1)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
+              CUP$ParserDatos$result = parser.getSymbolFactory().newSymbol("LISTA_VALORES",6, ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.elementAt(CUP$ParserDatos$top-2)), ((java_cup.runtime.Symbol)CUP$ParserDatos$stack.peek()), RESULT);
             }
           return CUP$ParserDatos$result;
 

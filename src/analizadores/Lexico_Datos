@@ -65,7 +65,7 @@ ESPACIOS_EN_BLANCO = [ \r\t]+
 {NUMERICO} {return new Symbol(symDatos.numerico, yyline, yychar, yytext());}
 
 . {
-    Main.lista_errores.add(new Errores(
+    main.Main_Interfaz.lista_errores.add(new Errores(
         "Error Lexico en el archivo de Datos",
         yytext(),
         yyline,

@@ -651,7 +651,7 @@ public class LexerDatos implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { Main.lista_errores.add(new Errores(
+            { main.Main_Interfaz.lista_errores.add(new Errores(
         "Error Lexico en el archivo de Datos",
         yytext(),
         yyline,

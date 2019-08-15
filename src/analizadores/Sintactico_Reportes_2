@@ -1,0 +1,228 @@
+package analizadores;
+
+import java.util.LinkedList;
+import java_cup.runtime.*;
+import main.*;
+
+
+parser code
+{:
+    //Estructuras que guardan las la de claves y de registros
+    public LinkedList<Object> lista_instrucciones;
+    public LinkedList<Variable> lista_declaracion = new LinkedList();
+
+    //Método al que se llama automáticamente ante algun error sintactico
+    public void syntax_error(Symbol s){
+        String error = "Error sintáctico en la línea " + (s.left) + " Columna " + (s.right) + ". No se esperaba este componente: " + (s.value);
+        Main_Interfaz.lista_errores.add(new Errores(error, s.value, s.left, s.right));
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". No se esperaba este componente: " + (s.value) + ".");
+    }
+
+    //Método al que se llama en el momento en que ya no es posible una recuperación de errores.
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". Componente " + (s.value) + " no reconocido.");
+    }
+
+:}
+
+terminal String igual, puntoycoma, parentesisabierto, parentesiscerrado, coma, mayor, menor, mayoroigual, menoroigual, dobleigual, diferentede;
+terminal String rnumerico, rcadena, rarchivo;
+terminal String rsumar, rcontar, rpromedio, rcontarsi, robtenersi, rleerarchivo, rimprimir, rgraficar;
+terminal String numerico, cadena, id;
+
+non terminal S;
+non terminal LinkedList<Object> LISTA_INSTRUCCIONES;
+non terminal INSTRUCCION;
+non terminal Variable DECLARACION;
+non terminal Imprimir IMPRIMIR;
+non terminal Grafica GRAFICAR;
+non terminal FuncionNumerica FUNCION_NUMERICA;
+non terminal ObtenerSi FUNCION_CADENA;
+non terminal String FUNCION_ARCHIVO;
+non terminal String OPERADOR;
+non terminal Valor VALOR;
+non terminal LinkedList<Expresion> LISTA_EXPRESIONES;
+non terminal Expresion EXPRESION;
+
+start with S;
+
+S ::= LISTA_INSTRUCCIONES:lista
+    {:
+        parser.lista_instrucciones = lista;
+    :}
+;
+
+LISTA_INSTRUCCIONES ::= LISTA_INSTRUCCIONES:a INSTRUCCION:b
+        {:
+            RESULT = a;
+            RESULT.add(b);
+        :}
+
+        | INSTRUCCION:a
+        {:
+            RESULT = new LinkedList();
+            RESULT.add(a);
+        :}
+;
+
+INSTRUCCION ::= DECLARACION:a
+        {:
+            RESULT = a;
+            parser.lista_declaracion.add(a);
+        :}
+
+        | IMPRIMIR:a
+        {:
+            RESULT = a;
+        :}
+
+        | GRAFICAR:a
+        {:
+            RESULT = a;
+        :}
+;
+
+
+DECLARACION ::= rnumerico id:nombre igual FUNCION_NUMERICA:a puntoycoma
+        {:
+            RESULT = new Variable(a, "numerico", nombre);
+        :}
+
+        | rcadena id:nombre igual FUNCION_CADENA:a puntoycoma
+        {:
+            RESULT = new Variable(a, "cadena", nombre);
+        :}
+
+        | rarchivo id:nombre igual FUNCION_ARCHIVO:ruta puntoycoma
+        {:
+                RESULT = new Variable(new Archivo(nombre,ruta),"archivo", nombre);
+        :}
+;
+
+
+FUNCION_NUMERICA ::= rsumar parentesisabierto id:identificador coma cadena:value parentesiscerrado 
+        {:
+            RESULT = new FuncionNumerica("sumar", identificador);
+            RESULT.setCadena(value);
+        :}
+
+        | rcontar parentesisabierto id:identificador parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("contar", identificador);
+        :}
+
+        | rpromedio parentesisabierto id:identificador coma cadena:value parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("promedio", identificador);
+            RESULT.setCadena(value);
+        :}
+
+        | rcontarsi parentesisabierto id:identificador coma cadena:clave coma OPERADOR:operador_rel coma VALOR:value parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("contarsi", identificador);
+            RESULT.setCadena(clave);
+            RESULT.setOperador(operador_rel);
+            RESULT.setValor(value);
+        :}
+;
+
+
+
+FUNCION_CADENA  ::= robtenersi parentesisabierto id:identificador coma cadena:clave coma OPERADOR:operador_rel coma VALOR:value parentesiscerrado
+        {:
+            RESULT = new ObtenerSi(identificador, clave, operador_rel, value);
+        :}
+;
+
+FUNCION_ARCHIVO ::= rleerarchivo parentesisabierto cadena:ruta parentesiscerrado
+        {:
+            RESULT = ruta;
+        :}
+;
+
+
+OPERADOR ::= mayor
+        {:
+            RESULT = ">";
+        :}
+
+        | menor
+        {:
+            RESULT = "<";
+        :}
+
+        | mayoroigual
+        {:
+            RESULT = ">=";
+        :}
+
+        | menoroigual
+        {:
+            RESULT = "<=";
+        :}
+
+        | dobleigual
+        {:
+            RESULT = "==";
+        :}
+
+        | diferentede
+        {:
+            RESULT = "!=";
+        :}
+;
+
+
+VALOR ::= numerico:numeros
+        {:
+            RESULT = new Valor(numeros, "numerico");
+        :}
+
+        |cadena:texto
+        {:
+            RESULT = new Valor(texto, "cadena");
+        :}
+;
+
+
+IMPRIMIR ::= rimprimir parentesisabierto LISTA_EXPRESIONES:lista parentesiscerrado puntoycoma
+        {:
+            RESULT = new Imprimir(lista);
+        :}
+;
+
+LISTA_EXPRESIONES ::= LISTA_EXPRESIONES:lista coma EXPRESION:siguiente_expresion
+        {:
+            RESULT = lista;
+            RESULT.add(siguiente_expresion);
+        :}
+
+        | EXPRESION:primera_expresion
+        {:
+            RESULT = new LinkedList();
+            RESULT.add(primera_expresion);
+        :}
+;
+
+
+EXPRESION ::= id:variable
+        {:
+            RESULT = new Expresion(variable, "variable");
+        :}
+
+        | numerico:numeros
+        {:
+            RESULT = new Expresion(numeros, "numerico");
+        :}
+
+        | cadena:texto
+        {:
+            RESULT = new Expresion(texto, "cadena");
+        :}
+;       
+
+GRAFICAR ::= rgraficar parentesisabierto cadena:nombre coma cadena:titulo coma id:identificador coma cadena:valx coma cadena:valy parentesiscerrado puntoycoma
+        {:
+            RESULT = new Grafica(nombre, titulo, identificador, valx, valy);
+        :}
+;

@@ -16,10 +16,7 @@ public class Registro {
     
     private LinkedList<Valor> valores = new LinkedList();
     
-    public Registro(){
-        
-    }
-    
+   
     public Registro(Valor valor){
         this.valores.add(valor);
     }
@@ -36,5 +33,25 @@ public class Registro {
         this.valores.add(valor);
     }
     
+    public String getRegistro(){
+        
+        String r = "{ ";
+        
+        for(Valor v: valores){
+            if (v == valores.getLast()){
+                r += v.getValor() + " ";
+            }else{
+                r += v.getValor() + ", ";
+            }
+        }
+        
+        r += " }";
+        
+        return r;
+        
+    }
+    
+    
+
     
 }

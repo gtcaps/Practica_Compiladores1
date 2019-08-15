@@ -47,9 +47,9 @@ ID = {LETRAS}({LETRAS}|{DIGITOS}|{GUION_BAJO})*
 
 ";" {return new Symbol(symReportes.puntoycoma, yyline, yychar, yytext());}
 
-"(" {return new Symbol(symReportes.parentesisAbierto, yyline, yychar, yytext());}
+"(" {return new Symbol(symReportes.parentesisabierto, yyline, yychar, yytext());}
 
-")" {return new Symbol(symReportes.parentesisCerrado, yyline, yychar, yytext());}
+")" {return new Symbol(symReportes.parentesiscerrado, yyline, yychar, yytext());}
 
 ">=" {return new Symbol(symReportes.mayoroigual, yyline, yychar, yytext());}
 
@@ -69,11 +69,13 @@ ID = {LETRAS}({LETRAS}|{DIGITOS}|{GUION_BAJO})*
 
 "numerico" {return new Symbol(symReportes.rnumerico, yyline, yychar, yytext());}
 
+"cadena" {return new Symbol(symReportes.rcadena, yyline, yychar, yytext());}
+
 "sumar" {return new Symbol(symReportes.rsumar, yyline, yychar, yytext());}
 
 "imprimir" {return new Symbol(symReportes.rimprimir, yyline, yychar, yytext());}
 
-"contar" {return new Symbol(symReportes.rcomprar, yyline, yychar, yytext());}
+"contar" {return new Symbol(symReportes.rcontar, yyline, yychar, yytext());}
 
 "promedio" {return new Symbol(symReportes.rpromedio, yyline, yychar, yytext());}
 
@@ -100,7 +102,7 @@ ID = {LETRAS}({LETRAS}|{DIGITOS}|{GUION_BAJO})*
 {ID} {return new Symbol(symReportes.id, yyline, yychar, yytext());}
 
 . {
-     Main.lista_errores.add(new Errores(
+     main.Main_Interfaz.lista_errores.add(new Errores(
         "Error Lexico en el archivo de Reportes",
         yytext(),
         yyline,

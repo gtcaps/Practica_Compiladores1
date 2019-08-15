@@ -1,0 +1,200 @@
+package analizadores;
+
+import java.util.LinkedList;
+import java_cup.runtime.*;
+import main.*;
+
+
+parser code
+{:
+    //Estructuras que guardan las la de claves y de registros
+    public LinkedList<LinkedList <Expresion>> raizImprimir = new LinkedList();
+    public LinkedList<Grafica> raizGraficar = new LinkedList();
+    public LinkedList<Variable> raizVariables;
+
+    //Método al que se llama automáticamente ante algun error sintactico
+    public void syntax_error(Symbol s){
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". No se esperaba este componente: " + (s.value) + ".");
+    }
+
+    //Método al que se llama en el momento en que ya no es posible una recuperación de errores.
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{
+        System.err.println("Error sintáctico en la línea " + (s.left) + "Columna " + (s.right) + ". Componente " + (s.value) + " no reconocido.");
+    }
+
+:}
+
+terminal String igual, puntoycoma, parentesisabierto, parentesiscerrado, coma, mayor, menor, mayoroigual, menoroigual, dobleigual, diferentede;
+terminal String rnumerico, rcadena, rarchivo;
+terminal String rsumar, rcontar, rpromedio, rcontarsi, robtenersi, rleerarchivo, rimprimir, rgraficar;
+terminal String numerico, cadena, id;
+
+non terminal S;
+non terminal LinkedList<Variable> LISTA_VARIABLES;
+non terminal Variable VARIABLE;
+non terminal FuncionNumerica FUNCION_NUMERICA;
+non terminal ObtenerSi FUNCION_CADENA;
+non terminal String FUNCION_ARCHIVO;
+non terminal String OPERADOR_RELACIONAL;
+non terminal Valor VALOR;
+non terminal FUNCIONES_SIN_RETORNO;
+non terminal LinkedList<Expresion> LISTA_EXPRESIONES;
+non terminal Expresion EXPRESION;
+
+start with S;
+
+S ::= LISTA_VARIABLES:a FUNCIONES_SIN_RETORNO
+        {:
+            parser.raizVariables = a;
+        :}
+;
+
+LISTA_VARIABLES ::= LISTA_VARIABLES:a VARIABLE:b
+        {:
+            RESULT = a;
+            RESULT.add(b);
+        :}
+
+        | VARIABLE:a
+        {:
+            RESULT = new LinkedList();
+            RESULT.add(a);
+        :}
+;
+
+VARIABLE ::= rnumerico id:nombre_variable igual FUNCION_NUMERICA:funcion puntoycoma
+        {:
+            RESULT = new Variable("numerico", new VariableNumerico(nombre_variable.toString(),funcion));
+        :}
+
+        | rcadena id:nombre_variable igual FUNCION_CADENA:valor puntoycoma
+        {:
+            RESULT = new Variable("cadena", new VariableCadena(nombre_variable.toString(), valor) );
+        :}
+
+        | rarchivo id:nombre_variable igual FUNCION_ARCHIVO:ruta_archivo puntoycoma
+        {:
+            RESULT = new Variable("archivo",new VariableArchivo(nombre_variable.toString(), ruta_archivo));
+        :}
+
+;
+
+FUNCION_NUMERICA ::= rsumar parentesisabierto id:identificador coma cadena:texto parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("sumar",identificador.toString());
+            RESULT.setCadena(texto);
+        :}
+
+        | rcontar parentesisabierto id:identificador parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("contar", identificador.toString());
+        :}
+
+        | rpromedio parentesisabierto id:identificador coma cadena:texto parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("promedio",identificador.toString());
+            RESULT.setCadena(texto);
+        :}
+
+        | rcontarsi parentesisabierto id:identificador coma cadena:text coma OPERADOR_RELACIONAL:operador_r coma VALOR:valor_str parentesiscerrado
+        {:
+            RESULT = new FuncionNumerica("contarSi",identificador.toString());
+            RESULT.setCadena(text);
+            RESULT.setOperador(operador_r);
+            RESULT.setValor(valor_str);
+        :}
+;
+
+FUNCION_CADENA ::= robtenersi parentesisabierto id:identificador coma cadena:cadena_txt coma OPERADOR_RELACIONAL:operador_rel coma VALOR:val_txt parentesiscerrado
+        {:
+            RESULT = new ObtenerSi(identificador.toString(), cadena_txt, operador_rel, val_txt);
+        :}
+;
+
+FUNCION_ARCHIVO ::= rleerarchivo parentesisabierto cadena:ruta parentesiscerrado
+        {:
+            RESULT = ruta;
+        :}
+;
+
+FUNCIONES_SIN_RETORNO ::= rimprimir parentesisabierto LISTA_EXPRESIONES:a parentesiscerrado puntoycoma
+        {:
+            parser.raizImprimir.add(a);
+        :}
+
+        | rgraficar parentesisabierto cadena:nombre coma cadena:titulo id:variable_archivo coma cadena:valores_x coma cadena:valores_y parentesiscerrado puntoycoma
+        {:
+            parser.raizGraficar.add(new Grafica(nombre, titulo, variable_archivo, valores_x, valores_y));
+        :}
+;
+
+LISTA_EXPRESIONES ::= LISTA_EXPRESIONES:a coma EXPRESION:b
+        {:
+            RESULT = a;
+            RESULT.add(b);
+        :}
+
+        | EXPRESION: a
+        {:
+            RESULT = new LinkedList();
+            RESULT.add(a);
+        :}
+;
+
+EXPRESION ::= id:nombre_variable 
+        {:
+            RESULT = new Expresion(nombre_variable, "variable");
+        :}
+
+        | numerico:valor_numerico
+        {:
+            RESULT = new Expresion(valor_numerico, "numerico");
+        :}
+
+        | cadena:cadena_de_texto
+        {:
+            RESULT = new Expresion(cadena_de_texto, "cadena");
+        :}
+;       
+
+OPERADOR_RELACIONAL ::= mayor
+        {:
+            RESULT = ">";
+        :}
+
+        | menor
+        {:
+            RESULT = "<";
+        :}
+
+        |mayoroigual
+        {:
+            RESULT = ">=";
+        :}
+
+        |menoroigual
+        {:
+            RESULT = "<=";
+        :}
+
+        |dobleigual
+        {:
+            RESULT = "==";
+        :}
+
+        |diferentede
+        {:
+            RESULT = "!=";
+        :}
+;
+
+VALOR ::= numerico:valor_numerico
+        {:
+            RESULT = new Valor(valor_numerico, "numerico");
+        :}
+
+        | cadena:valor_string
+        {:
+            RESULT = new Valor(valor_string, "cadena");
+        :}
+;
