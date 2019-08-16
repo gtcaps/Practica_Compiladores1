@@ -15,6 +15,7 @@ public class Imprimir {
     
     private LinkedList<Expresion> lista_expresiones;
     
+    
     public Imprimir(LinkedList<Expresion> lista){
         this.lista_expresiones = lista;
     }

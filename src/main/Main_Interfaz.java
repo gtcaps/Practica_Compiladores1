@@ -28,12 +28,12 @@ public class Main_Interfaz extends javax.swing.JFrame {
     /**
      * Creates new form Main_Interfaz
      */
-    
     public static String path_file;
     public static LinkedList<Object> lista_instrucciones;
     public static LinkedList<Errores> lista_errores = new LinkedList();
-    
-    
+    public static LinkedList<Archivo> lista_archivos = new LinkedList();
+    public static LinkedList<Variable> lista_funciones = new LinkedList();
+
     public Main_Interfaz() {
         initComponents();
         setLocationRelativeTo(null);
@@ -151,28 +151,26 @@ public class Main_Interfaz extends javax.swing.JFrame {
             File file = archivo.getSelectedFile();
             path_file = file.getPath();
 
-
             if (file != null) {
                 FileReader open = new FileReader(file);
                 BufferedReader read = new BufferedReader(open);
                 String txt = "", aux = "";
-                    
-                while((txt=read.readLine()) != null){
+
+                while ((txt = read.readLine()) != null) {
                     aux += txt + "\n";
                 }
-                
+
                 read.close();
                 editor.removeAll();
                 editor.append(aux);
             }
 
-            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Main_Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null,"No se encontro el archivo");
+            JOptionPane.showMessageDialog(null, "No se encontro el archivo");
         } catch (IOException ex) {
             Logger.getLogger(Main_Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null,"No se encontro el archivo");
+            JOptionPane.showMessageDialog(null, "No se encontro el archivo");
         }
 
 
@@ -182,34 +180,157 @@ public class Main_Interfaz extends javax.swing.JFrame {
         try {
             Analizador analizar = new Analizador(path_file);
             lista_instrucciones = analizar.getLista();
-            
-            
+
             consola.setText("");
-            consola.append("Hay " + lista_instrucciones.size() + " instrucciones\n");
-            for(Object o: lista_instrucciones){
-                consola.append(o.getClass() + "\n");
+            //consola.append("Hay " + lista_instrucciones.size() + " instrucciones\n");
+            for (Object o : lista_instrucciones) {
+
+                //Conocer el tipo de instrucción que se va a trabajar
+                if (o instanceof Variable) {
+
+                    if (((Variable) o).getVariable() instanceof Archivo) { //INSTRUCCION DE TIPO ARCHIVO
+
+                        Archivo archivo = (Archivo) ((Variable) o).getVariable();
+                        archivo.generate();
+                        lista_archivos.add(archivo);
+
+                    } else if (((Variable) o).getVariable() instanceof FuncionNumerica) { //INSTRUCCION DE TIPO FUNCION NUMERICA
+
+                        FuncionNumerica fn = (FuncionNumerica) ((Variable) o).getVariable();
+                        //consola.append("    ----> " + ((Variable) o).getNombre() + "   ---- " + fn.getNombreFuncion() + "\n");
+
+                        if (fn.getNombreFuncion().trim().equalsIgnoreCase("sumar")) {
+                            String nombre_archivo = fn.getId();
+                            String nombre_clave = fn.getCadena();
+
+                            //BUSCAR LA VARIABLE DE TIPO ARCHIVO
+                            for (Archivo a : lista_archivos) {
+                                if (a.getNombre().trim().equalsIgnoreCase(nombre_archivo.trim())) {
+                                    fn.funcionSumar(a, nombre_clave);
+                                    lista_funciones.add(new Variable(fn.getResultadoFuncion(),"numerico", ((Variable) o).getNombre()));
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        if (fn.getNombreFuncion().trim().equalsIgnoreCase("contar")) {
+                            String nombre_archivo = fn.getId();
+
+                            //BUSCAR LA VARIABLE DE TIPO ARCHIVO
+                            for (Archivo a : lista_archivos) {
+                                if (a.getNombre().trim().equalsIgnoreCase(nombre_archivo.trim())) {
+                                    fn.funcionContar(a);
+                                    lista_funciones.add(new Variable(fn.getResultadoFuncion(),"numerico", ((Variable) o).getNombre()));
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (fn.getNombreFuncion().trim().equalsIgnoreCase("promedio")) {
+                            String nombre_archivo = fn.getId();
+                            String nombre_clave = fn.getCadena();
+
+                            //BUSCAR LA VARIABLE DE TIPO ARCHIVO
+                            for (Archivo a : lista_archivos) {
+                                if (a.getNombre().trim().equalsIgnoreCase(nombre_archivo.trim())) {
+                                    fn.funcionPromedio(a, nombre_clave);
+                                    lista_funciones.add(new Variable(fn.getResultadoFuncion(),"numerico", ((Variable) o).getNombre()));
+                                    break;
+                                }
+                            }
+
+                        }
+
+                        if (fn.getNombreFuncion().trim().equalsIgnoreCase("contarsi")) {
+                            String nombre_archivo = fn.getId();
+                            String nombre_clave = fn.getCadena();
+                            String operador = fn.getOperador();
+                            Valor condicion = fn.getValor();
+
+                            //consola.append(nombre_archivo + " --- " + nombre_clave + " ---- " + operador + " ------ " + condicion.getValor() + "\n");
+                            //BUSCAR LA VARIABLE DE TIPO ARCHIVO
+                            for (Archivo a : lista_archivos) {
+                                if (a.getNombre().trim().equalsIgnoreCase(nombre_archivo.trim())) {
+                                    fn.funcionContarSi(a, nombre_clave, operador, condicion);
+                                    lista_funciones.add(new Variable(fn.getResultadoFuncion(),"numerico", ((Variable) o).getNombre()));
+                                    break;
+                                }
+                            }
+
+                        }
+                    } else { //INSTRUCCION DE TIPO OBTENER SI
+
+                        ObtenerSi os = (ObtenerSi) ((Variable) o).getVariable();
+                        //consola.append("    ----> " + ((Variable) o).getNombre() + "\n");
+
+                        String nombre_archivo = os.getId();
+                        String nombre_clave = os.getClave();
+                        String operador = os.getOperador();
+                        Valor condicion = os.getValor();
+
+                        //consola.append(nombre_archivo + " --- " + nombre_clave + " ---- " + operador + " ------ " + condicion.getValor() + "\n");
+                        //BUSCAR LA VARIABLE DE TIPO ARCHIVO
+                        for (Archivo a : lista_archivos) {
+                            if (a.getNombre().trim().equalsIgnoreCase(nombre_archivo.trim())) {
+                                os.funcionObtenerSi(a, nombre_clave, operador, condicion);
+                                lista_funciones.add(new Variable(os.obtenerResultado(),"cadena",((Variable) o).getNombre()));
+                                break;
+                            }
+                        }
+
+                        //consola.append("    Resultado: " + os.obtenerResultado() + "\n");
+                    }
+
+                } else if (o instanceof Imprimir) {
+                    //consola.append("----------------------->IMPRIMIR<-----------------------\n");
+
+                    Imprimir im = (Imprimir) o;
+                    LinkedList<Expresion> ex = im.getLista_expresiones();
+                    String salida = "";
+
+                    for (Expresion exp : ex) {
+                        //consola.append(exp.getTipo() + " ---- " + exp.getValor()+ "\n");
+
+                        
+                        if (exp.getTipo() == "variable") {
+                            //ARCHIVO
+                            for (Archivo a : lista_archivos) {
+                                if (a.getNombre().trim().equalsIgnoreCase(exp.getValor().trim())) {
+                                    salida += a.imprimir();
+                                    break;
+                                }
+                            }
+                        
+                            //FUNCIONES
+                            for (Variable a : lista_funciones) {
+                                if (a.getNombre().trim().equalsIgnoreCase(exp.getValor().trim())) {
+                                    salida += a.getVariable().toString() + " ";
+                                    break;
+                                }
+                            }
+                        }else{
+                            salida += exp.getValor().replace("\"", "");
+                        }
+                    }
+
+                    consola.append(salida + "\n");
+                } else {
+                    //consola.append("GRAFICAR\n");
+                }
+
             }
-            
-          
-            /* FUNCION LEER ARCHIVO QUE DEVUELVE UNA MATRIZ CON LA INFORMACIÓN
-            * LeerArchivo d = new LeerArchivo("C:/Users/aybso/Downloads/Ejemplo_Entrada_Práctica1/articulos.dat");
-            */
-            
-            
-            
-            consola.append("-------------ERRORES ------------------\n");
-            for(Errores error: lista_errores){
-                consola.append(error.getDescripcion() + " - Linea " + error.getValor() + "\n");
-            }
-            
+
         } catch (Exception ex) {
             consola.setText("");
             consola.setText("Error en la compilación\n");
+            /*
             for(Errores error: lista_errores){
                 consola.append(error.getDescripcion() + "\n");
-            }
+            }*/
             Logger.getLogger(Main_Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_opcionCompilarMouseClicked
 
     /**
